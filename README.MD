@@ -48,8 +48,32 @@ Our new tag is on $TAG variable
 `./script/build.sh`
 
 
+## Create the Image repository
+
+`aws ecr create-repository --repository-name xpeppers/aws-ecs-workshop`
 
 
+``` json
+{
+    "repository": {
+        "registryId": "831650818513",
+        "repositoryName": "xpeppers/aws-ecs-workshop",
+        "repositoryArn": "arn:aws:ecr:us-east-1:831650818513:repository/xpeppers/aws-ecs-workshop",
+        "createdAt": 1493209368.0,
+        "repositoryUri": "831650818513.dkr.ecr.us-east-1.amazonaws.com/xpeppers/aws-ecs-workshop"
+    }
+}
+```
+
+or better:
+
+```
+echo "REGISTRY"=`aws ecr create-repository --repository-name xpeppers/aws-ecs-workshop | jq ".repository.repositoryUri" -r` >> .env
+
+cat .env
+```
+
+> 831650818513.dkr.ecr.us-east-1.amazonaws.com/xpeppers/aws-ecs-workshop
 
 
 ## Propedeutical Tasks
