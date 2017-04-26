@@ -24,17 +24,32 @@ The app folder contains the sourcecode, the Dockerfile is a flask app with an he
 
 ## on stage - build && push
 
+### Manually
+
 The file `.env` contain the default tag, but in the real world app, we need to increase the value.
 
 1. `chmod +x /script/increment-tag.sh && ./script/increment-tag.sh`
+
    > ➜ 0.0.2
+   
 2. `export TAG=$(./script/increment-tag.sh) || echo "version $TAG already exists"`
 
 Our new tag is on $TAG variable
 
 3. docker-compose build && docker-compose push
+
    > ➜  aws-ecs-workshop git:(master) ✗ docker-compose push                                                               
-     Pushing web (liuggio/aws-ecs-workshop:0.0.1)...
+     Pushing web (liuggio/aws-ecs-workshop:0.0.2)...
+
+4. tag and push latest.
+
+### Automatically lunch the script.
+
+`./script/increment-tag.sh`
+
+
+
+
 
 
 ## Propedeutical Tasks
