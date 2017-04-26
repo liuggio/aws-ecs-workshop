@@ -45,7 +45,7 @@ Our new tag is on $TAG variable
 
 ### Automatically lunch the script.
 
-`./script/increment-tag.sh`
+`./script/build.sh`
 
 
 
