@@ -1,0 +1,10 @@
+version: '2'
+services:
+  web:
+    image: liuggio/aws-ecs-workshop:$TAG
+    build: .
+    environment:
+      - COLOR=green
+      - TAG=$TAG
+    cpu_shares: 128
+    mem_limit: 134217728

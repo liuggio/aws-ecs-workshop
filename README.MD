@@ -1,5 +1,42 @@
 # ECS and Docker Demo
 
+## Setting up the environment
+
+1. install `awscli` http://docs.aws.amazon.com/cli/latest/userguide/installing.html
+2. install `ecs-cli` http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
+
+## on dev - work with your app in the dev
+
+The app folder contains the sourcecode, the Dockerfile is a flask app with an health-check.
+
+1. `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build`.
+2. Open `http://localhost:8080`
+3. Modify the string in `app/app.py:12` then you will see modification immediately.
+
+## test if it works
+
+`curl -sL -w "%{http_code}\n"  http://0.0.0.0:8080/`
+
+> Hello! I am tiny service on <br> Hostname:"255edaace911"<br> Color:"green"<br> Version:"latest"<br> Visit count:171 times.
+> 200
+
+`[[ $(curl -sL -w "%{http_code}\n"  http://0.0.0.0:8080/ | tail -n 1) == "200" ]]; echo $?`
+
+## on stage - build && push
+
+The file `.env` contain the default tag, but in the real world app, we need to increase the value.
+
+1. `chmod +x /script/increment-tag.sh && ./script/increment-tag.sh`
+   > ➜ 0.0.2
+2. `export TAG=$(./script/increment-tag.sh) || echo "version $TAG already exists"`
+
+Our new tag is on $TAG variable
+
+3. docker-compose build && docker-compose push
+   > ➜  aws-ecs-workshop git:(master) ✗ docker-compose push                                                               
+     Pushing web (liuggio/aws-ecs-workshop:0.0.1)...
+
+
 ## Propedeutical Tasks
 
 #### Launch Monitoring application
