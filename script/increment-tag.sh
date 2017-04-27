@@ -26,8 +26,8 @@ createSemVerTag() {
     #only tag if no tag already (would be better if the git describe command above could have a silent option)
     if [ -z "$NEEDS_TAG" ]; then
         #echo "< yes, $NEW_TAG (Ignoring fatal:cannot describe - this means commit is untagged) "
-        git tag $NEW_TAG
-        git push --tags
+        git tag $NEW_TAG > /dev/null
+        git push --tags > /dev/null
         echo $NEW_TAG;
         VERSION=$NEW_TAG;
     else

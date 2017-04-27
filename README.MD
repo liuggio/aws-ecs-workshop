@@ -5,7 +5,7 @@
 1. install `awscli` http://docs.aws.amazon.com/cli/latest/userguide/installing.html
 2. install `ecs-cli` http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
 
-## on dev - work with your app in the dev
+## On dev - work with your app in the dev
 
 The app folder contains the sourcecode, the Dockerfile is a flask app with an health-check.
 
@@ -13,7 +13,7 @@ The app folder contains the sourcecode, the Dockerfile is a flask app with an he
 2. Open `http://localhost:8080`
 3. Modify the string in `app/app.py:12` then you will see modification immediately.
 
-## test if it works
+## Test if it works
 
 `curl -sL -w "%{http_code}\n"  http://0.0.0.0:8080/`
 
@@ -22,7 +22,7 @@ The app folder contains the sourcecode, the Dockerfile is a flask app with an he
 
 `[[ $(curl -sL -w "%{http_code}\n"  http://0.0.0.0:8080/ | tail -n 1) == "200" ]]; echo $?`
 
-## on stage - build && push
+## On stage - build && push
 
 ### Manually
 
@@ -49,7 +49,7 @@ Our new tag is on $TAG variable
 
 ## Create the Image repository
 
-`aws ecr create-repository --repository-name xpeppers/aws-ecs-workshop`
+`aws ecr create-repository --repository-name xpeppers/aws-ecs-workshop > config/ecr_repository.json`
 
 ``` json
 {
@@ -63,20 +63,20 @@ Our new tag is on $TAG variable
 }
 ```
 
-or better:
+then:
 
 ```
-echo "REGISTRY"=`aws ecr create-repository --repository-name xpeppers/aws-ecs-workshop | jq ".repository.repositoryUri" -r` >> .env
-
-cat .env
+jq ".repository.repositoryUri" -r config/ecr_repository.json
 ```
 
 > 831650818513.dkr.ecr.us-east-1.amazonaws.com/xpeppers/aws-ecs-workshop
 
 ### Show all the images
 
+```
+aws ecr list-images --repository-name `jq ".repository.repositoryName" -r config/ecr_repository.json`
 
-`aws ecr list-images --repository-name xpeppers/aws-ecs-workshop`
+```
 
 ``` json
 {
@@ -92,6 +92,19 @@ cat .env
     ]
 }
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Create the Computation stack
 

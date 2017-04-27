@@ -1,0 +1,9 @@
+{
+  "repository": {
+    "registryId": "831650818513",
+    "repositoryName": "xpeppers/aws-ecs-workshop",
+    "repositoryArn": "arn:aws:ecr:us-east-1:831650818513:repository/xpeppers/aws-ecs-workshop",
+    "createdAt": 1493209368.0,
+    "repositoryUri": "831650818513.dkr.ecr.us-east-1.amazonaws.com/xpeppers/aws-ecs-workshop"
+  }
+}
