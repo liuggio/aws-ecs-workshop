@@ -5,13 +5,13 @@
 export TAG=$(./script/increment-tag.sh) || echo "version $TAG already exists"
 echo $TAG;
 
-REGISTRY=831650818513.dkr.ecr.us-east-1.amazonaws.com/xpeppers/aws-ecs-workshop
+REGISTRY=`jq ".repository.repositoryUri" -r config/ecr_repository.json`
 
 docker-compose build \
   && docker-compose push \
   && echo "aliasing latest from $TAG" \
   && docker tag $REGISTRY:$TAG $REGISTRY:latest \
   && docker push $REGISTRY:latest \
-  && echo "completed."
+  && echo "completed $TAG."
 
 exit $?
