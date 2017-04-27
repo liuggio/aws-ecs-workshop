@@ -47,11 +47,9 @@ Our new tag is on $TAG variable
 
 `./script/build.sh`
 
-
 ## Create the Image repository
 
 `aws ecr create-repository --repository-name xpeppers/aws-ecs-workshop`
-
 
 ``` json
 {
@@ -74,6 +72,35 @@ cat .env
 ```
 
 > 831650818513.dkr.ecr.us-east-1.amazonaws.com/xpeppers/aws-ecs-workshop
+
+### Show all the images
+
+
+`aws ecr list-images --repository-name xpeppers/aws-ecs-workshop`
+
+``` json
+{
+    "imageIds": [
+        {
+            "imageTag": "v1", 
+            "imageDigest": "sha256:ccf3adf9fedb0bbc1460d133768e2cffba33e598677ff9373734ecb5d096d882"
+        }, 
+        {
+            "imageTag": "latest", 
+            "imageDigest": "sha256:ccf3adf9fedb0bbc1460d133768e2cffba33e598677ff9373734ecb5d096d882"
+        }
+    ]
+}
+```
+
+## Create the Computation stack
+
+```
+aws cloudformation create-stack --stack-name aws-ecs-workshop --template-body file://./infrastructure-ecs/ecs.json --parameters file://./infrastructure-ecs/parameters.json
+```
+
+
+
 
 
 ## Propedeutical Tasks

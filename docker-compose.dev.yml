@@ -6,7 +6,7 @@ services:
     networks:
      - backend
     ports:
-     - "8080:8080"
+     - "80:80"
   redis:
     image: "redis:alpine"
     cpu_shares: 128
