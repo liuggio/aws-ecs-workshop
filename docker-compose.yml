@@ -6,10 +6,5 @@ services:
       context: .
       args:
         TAG_VERSION_ARG: $TAG
-    environment:
-      - COLOR=green
-      - TAG=$TAG
-#      - REDIS_HOST=redis
-#      - REDIS_PORT=6379
     cpu_shares: 128
     mem_limit: 134217728
