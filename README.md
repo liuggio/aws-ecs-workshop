@@ -137,3 +137,7 @@ aws ecs update-service --service $SERVICE --cluster $CLUSTER --task-definition "
 ```
 aws logs create-log-group --log-group-name `jq ".log" -r config/env.json`
 ```
+
+## Automate explicitly all the use cases
+
+read the `script` folder.
