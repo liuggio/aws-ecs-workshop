@@ -5,10 +5,10 @@
 export TAG=$(./script/increment-tag.sh) || echo "version $TAG already exists"
 echo $TAG;
 
-REGISTRY=`jq ".repository.repositoryUri" -r config/ecr_repository.json`
+export REGISTRY=`jq ".repository.repositoryUri" -r config/ecr_repository.json`
 
-docker-compose build \
-  && docker-compose push \
+docker-compose -f docker-compose.prod.yml build \
+  && docker-compose -f docker-compose.prod.yml push \
   && echo "aliasing latest from $TAG" \
   && docker tag $REGISTRY:$TAG $REGISTRY:latest \
   && docker push $REGISTRY:latest \

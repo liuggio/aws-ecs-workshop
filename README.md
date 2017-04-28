@@ -10,18 +10,22 @@
 
 The app folder contains the sourcecode, the Dockerfile is a flask app with an health-check.
 
-1. `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build`.
+1. `docker-compose up --build`.
 2. Open `http://localhost:8080`
 3. Modify the string in `app/app.py:12` then you will see modification immediately.
 
 ## Test if it works
 
-`curl -sL -w "%{http_code}\n"  http://0.0.0.0:8080/`
+`curl -sL -w "%{http_code}\n"  http://0.0.0.0:80/`
 
 > Hello! I am tiny service on <br> Hostname:"255edaace911"<br> Color:"green"<br> Version:"latest"<br> Visit count:171 times.
 > 200
 
-`[[ $(curl -sL -w "%{http_code}\n"  http://0.0.0.0:8080/ | tail -n 1) == "200" ]]; echo $?`
+## Docker-compose.prod
+
+- Variables
+- Image repository
+- Constrains
 
 ## Image repository
 
@@ -105,23 +109,31 @@ aws cloudformation create-stack --stack-name aws-ecs-workshop --template-body fi
 
 ## Create Task
 
-`ecs-cli compose -p ecs-demo create`
+`ecs-cli compose -f docker-compose.prod.yml -p ecs-demo create`
 
 ## Create Service with LB
 
 ```
-CLUSTER=`jq ".repository.cluster" -r config/env.json`
-TASK=`jq ".repository.task" -r config/env.json`
-SERVICE=`jq ".repository.service" -r config/env.json`
+CLUSTER=`jq ".cluster" -r config/env.json`
+TASK=`jq ".task" -r config/env.json`
+SERVICE=`jq ".service" -r config/env.json`
+ARN=`jq ".arn" -r config/env.json`
 
 aws ecs create-service \
    --service-name "$SERVICE" --cluster $CLUSTER \
    --task-definition "ecscompose-python-microservice-one" \
-   --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:831650818513:loadbalancer/app/ecs-demo-lb5/3f31dc86a0829800" --desired-count 2 --deployment-configuration "maximumPercent=200,minimumHealthyPercent=50"
+   --load-balancers "targetGroupArn=$ARN" --desired-count 2 --deployment-configuration "maximumPercent=200,minimumHealthyPercent=50"
 ```
 
 "New deploy :)"
 
 ```
-aws ecs update-service --service UniRoma2-MicroserviceOne --cluster UniRoma2-ECSCluster-1JYA72NORCX8 --task-definition "ecscompose-python-microservice-two" --desired-count 2 --deployment-configuration "maximumPercent=200,minimumHealthyPercent=100"
+ecs-cli compose -p ecs-demo create
+aws ecs update-service --service $SERVICE --cluster $CLUSTER --task-definition "$TASK" --desired-count 2 --deployment-configuration "maximumPercent=200,minimumHealthyPercent=100"
+```
+
+## Create Log 
+
+```
+aws logs create-log-group --log-group-name `jq ".log" -r config/env.json`
 ```
